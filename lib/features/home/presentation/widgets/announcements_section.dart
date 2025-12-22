@@ -1,0 +1,248 @@
+import 'package:flutter/material.dart';
+import 'package:uimspace_app/core/theme/space_theme.dart';
+import 'package:uimspace_app/core/widgets/space_card.dart';
+import 'package:uimspace_app/core/widgets/space_components.dart';
+
+/// Model untuk data pengumuman
+class Announcement {
+  final String id;
+  final String title;
+  final String content;
+  final DateTime date;
+  final AnnouncementType type;
+  final bool isRead;
+  final String? author;
+
+  const Announcement({
+    required this.id,
+    required this.title,
+    required this.content,
+    required this.date,
+    this.type = AnnouncementType.info,
+    this.isRead = false,
+    this.author,
+  });
+}
+
+enum AnnouncementType { info, important, urgent, event }
+
+/// Widget untuk menampilkan pengumuman terbaru
+class AnnouncementsSection extends StatelessWidget {
+  final List<Announcement> announcements;
+  final VoidCallback? onViewAll;
+  final Function(Announcement)? onAnnouncementTap;
+
+  const AnnouncementsSection({
+    super.key,
+    required this.announcements,
+    this.onViewAll,
+    this.onAnnouncementTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SpaceSectionHeader(
+          title: 'Pengumuman Terbaru',
+          actionText: 'Lihat Semua',
+          onAction: onViewAll,
+        ),
+        if (announcements.isEmpty)
+          _buildEmptyState()
+        else
+          ListView.separated(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: announcements.length > 2 ? 2 : announcements.length,
+            separatorBuilder: (context, index) =>
+                const SizedBox(height: SpaceDimensions.spacing12),
+            itemBuilder: (context, index) {
+              return _AnnouncementItem(
+                announcement: announcements[index],
+                onTap: () => onAnnouncementTap?.call(announcements[index]),
+              );
+            },
+          ),
+      ],
+    );
+  }
+
+  Widget _buildEmptyState() {
+    return SpaceCard(
+      child: Row(
+        children: [
+          Icon(
+            Icons.notifications_none_rounded,
+            size: SpaceDimensions.iconXl,
+            color: SpaceColors.textSecondary,
+          ),
+          const SizedBox(width: SpaceDimensions.spacing12),
+          Text(
+            'Belum ada pengumuman terbaru',
+            style: SpaceTextStyles.bodyMedium.copyWith(
+              color: SpaceColors.textSecondary,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _AnnouncementItem extends StatelessWidget {
+  final Announcement announcement;
+  final VoidCallback? onTap;
+
+  const _AnnouncementItem({required this.announcement, this.onTap});
+
+  Color get _typeColor => switch (announcement.type) {
+    AnnouncementType.urgent => SpaceColors.error,
+    AnnouncementType.important => SpaceColors.warning,
+    AnnouncementType.event => SpaceColors.secondary,
+    AnnouncementType.info => SpaceColors.info,
+  };
+
+  IconData get _typeIcon => switch (announcement.type) {
+    AnnouncementType.urgent => Icons.priority_high_rounded,
+    AnnouncementType.important => Icons.star_rounded,
+    AnnouncementType.event => Icons.event_rounded,
+    AnnouncementType.info => Icons.info_outline_rounded,
+  };
+
+  String get _typeLabel => switch (announcement.type) {
+    AnnouncementType.urgent => 'Mendesak',
+    AnnouncementType.important => 'Penting',
+    AnnouncementType.event => 'Acara',
+    AnnouncementType.info => 'Info',
+  };
+
+  String _formatDate(DateTime date) {
+    final now = DateTime.now();
+    final difference = now.difference(date);
+
+    if (difference.inMinutes < 60) {
+      return '${difference.inMinutes} menit lalu';
+    } else if (difference.inHours < 24) {
+      return '${difference.inHours} jam lalu';
+    } else if (difference.inDays == 1) {
+      return 'Kemarin';
+    } else if (difference.inDays < 7) {
+      return '${difference.inDays} hari lalu';
+    } else {
+      return '${date.day}/${date.month}/${date.year}';
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SpaceCard(
+      onTap: onTap,
+      hasGlow:
+          announcement.type == AnnouncementType.urgent ||
+          announcement.type == AnnouncementType.important,
+      borderColor: !announcement.isRead
+          ? _typeColor.withValues(alpha: 0.5)
+          : null,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              // Type indicator
+              Container(
+                padding: const EdgeInsets.all(SpaceDimensions.spacing8),
+                decoration: BoxDecoration(
+                  color: _typeColor.withValues(alpha: 0.15),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  _typeIcon,
+                  color: _typeColor,
+                  size: SpaceDimensions.iconMd,
+                ),
+              ),
+              const SizedBox(width: SpaceDimensions.spacing12),
+              // Title and type badge
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        SpaceBadge(
+                          text: _typeLabel,
+                          backgroundColor: _typeColor,
+                        ),
+                        if (!announcement.isRead) ...[
+                          const SizedBox(width: SpaceDimensions.spacing8),
+                          Container(
+                            width: 8,
+                            height: 8,
+                            decoration: BoxDecoration(
+                              color: SpaceColors.secondary,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                    const SizedBox(height: SpaceDimensions.spacing6),
+                    Text(
+                      announcement.title,
+                      style: SpaceTextStyles.titleSmall,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: SpaceDimensions.spacing12),
+          // Content preview
+          Text(
+            announcement.content,
+            style: SpaceTextStyles.bodySmall,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+          const SizedBox(height: SpaceDimensions.spacing12),
+          // Footer with date and author
+          Row(
+            children: [
+              Icon(
+                Icons.access_time_rounded,
+                size: SpaceDimensions.iconSm,
+                color: SpaceColors.textSecondary,
+              ),
+              const SizedBox(width: SpaceDimensions.spacing4),
+              Text(
+                _formatDate(announcement.date),
+                style: SpaceTextStyles.labelSmall,
+              ),
+              if (announcement.author != null) ...[
+                const SizedBox(width: SpaceDimensions.spacing12),
+                Icon(
+                  Icons.person_outline_rounded,
+                  size: SpaceDimensions.iconSm,
+                  color: SpaceColors.textSecondary,
+                ),
+                const SizedBox(width: SpaceDimensions.spacing4),
+                Expanded(
+                  child: Text(
+                    announcement.author!,
+                    style: SpaceTextStyles.labelSmall,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
