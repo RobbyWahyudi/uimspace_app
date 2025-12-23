@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:uimspace_app/core/theme/space_theme.dart';
 import 'package:uimspace_app/core/widgets/space_components.dart';
 import 'widgets/home_widgets.dart';
+import 'package:uimspace_app/features/notifications/presentation/notification_page.dart';
+import 'package:uimspace_app/features/profile/presentation/profile_page.dart';
+import 'package:uimspace_app/features/course/data/models/course_models.dart';
+import 'package:uimspace_app/features/course/presentation/course_detail_page.dart';
 
 /// Halaman Beranda (Home)
 /// Menampilkan dashboard utama dengan:
@@ -386,13 +390,17 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _onProfileTap() {
-    // TODO: Navigate to profile page
-    debugPrint('Navigate to Profile');
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const ProfilePage()),
+    );
   }
 
   void _onNotificationTap() {
-    // TODO: Navigate to notifications
-    debugPrint('Navigate to Notifications');
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const NotificationsPage()),
+    );
   }
 
   void _onSearch(String query) {
@@ -426,8 +434,10 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _onCourseTap(CourseProgress course) {
-    // TODO: Navigate to course detail
-    debugPrint('Open Course: ${course.name}');
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => CourseDetailPage(course: course)),
+    );
   }
 }
 

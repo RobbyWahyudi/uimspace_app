@@ -2,30 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:uimspace_app/core/theme/space_theme.dart';
 import 'package:uimspace_app/core/widgets/space_card.dart';
 import 'package:uimspace_app/core/widgets/space_components.dart';
-
-/// Model untuk data progres kelas
-class CourseProgress {
-  final String id;
-  final String name;
-  final String code;
-  final int completedModules;
-  final int totalModules;
-  final double grade;
-  final Color? accentColor;
-
-  const CourseProgress({
-    required this.id,
-    required this.name,
-    required this.code,
-    required this.completedModules,
-    required this.totalModules,
-    this.grade = 0,
-    this.accentColor,
-  });
-
-  double get progressPercentage =>
-      totalModules > 0 ? completedModules / totalModules : 0;
-}
+import 'package:uimspace_app/features/course/data/models/course_models.dart';
 
 /// Widget untuk menampilkan ringkasan progres kelas
 class ClassProgressSection extends StatelessWidget {
