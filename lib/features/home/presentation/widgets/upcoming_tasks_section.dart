@@ -104,13 +104,6 @@ class _UpcomingTaskItem extends StatelessWidget {
     TaskPriority.low => SpaceColors.textSecondary,
   };
 
-  IconData get _typeIcon => switch (task.type) {
-    TaskType.assignment => Icons.assignment_outlined,
-    TaskType.quiz => Icons.quiz_outlined,
-    TaskType.project => Icons.folder_outlined,
-    TaskType.exam => Icons.school_outlined,
-  };
-
   String get _typeLabel => switch (task.type) {
     TaskType.assignment => 'Tugas',
     TaskType.quiz => 'Kuis',
@@ -166,20 +159,6 @@ class _UpcomingTaskItem extends StatelessWidget {
             ),
           ),
           const SizedBox(width: SpaceDimensions.spacing12),
-          // Icon
-          Container(
-            padding: const EdgeInsets.all(SpaceDimensions.spacing10),
-            decoration: BoxDecoration(
-              color: _priorityColor.withValues(alpha: 0.15),
-              borderRadius: BorderRadius.circular(SpaceDimensions.radiusSm),
-            ),
-            child: Icon(
-              _typeIcon,
-              color: _priorityColor,
-              size: SpaceDimensions.iconMd,
-            ),
-          ),
-          const SizedBox(width: SpaceDimensions.spacing12),
           // Content
           Expanded(
             child: Column(
@@ -217,12 +196,12 @@ class _UpcomingTaskItem extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Icon(
-                Icons.schedule_rounded,
-                size: SpaceDimensions.iconSm,
-                color: _getDueDateColor(task.dueDate),
-              ),
-              const SizedBox(height: SpaceDimensions.spacing4),
+              // Icon(
+              //   Icons.schedule_rounded,
+              //   size: SpaceDimensions.iconSm,
+              //   color: _getDueDateColor(task.dueDate),
+              // ),
+              // const SizedBox(height: SpaceDimensions.spacing4),
               Text(
                 _formatDueDate(task.dueDate),
                 style: SpaceTextStyles.labelSmall.copyWith(

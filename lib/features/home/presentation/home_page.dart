@@ -343,7 +343,7 @@ class _HomePageState extends State<HomePage> {
             icon: Icons.assignment_turned_in_rounded,
             label: 'Tugas Aktif',
             value: _upcomingTasks.length.toString(),
-            color: SpaceColors.warning,
+            color: SpaceColors.primary,
             onTap: _onViewAllTasks,
           ),
         ),
@@ -365,7 +365,7 @@ class _HomePageState extends State<HomePage> {
             icon: Icons.mail_outline_rounded,
             label: 'Pesan Baru',
             value: '5',
-            color: SpaceColors.secondary,
+            color: SpaceColors.primary,
             onTap: () {
               // Navigate to messages
             },
