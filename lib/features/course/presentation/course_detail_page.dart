@@ -5,6 +5,9 @@ import 'package:uimspace_app/features/course/data/models/course_models.dart';
 import 'package:uimspace_app/core/widgets/space_components.dart';
 import 'package:uimspace_app/features/assignments/models/assignment_model.dart';
 import 'package:uimspace_app/features/assignments/presentation/assignment_detail_page.dart';
+import 'package:uimspace_app/features/quiz/models/quiz_model.dart';
+import 'package:uimspace_app/features/quiz/models/question_model.dart';
+import 'package:uimspace_app/features/quiz/presentation/quiz_start_page.dart';
 import 'package:intl/intl.dart';
 
 class CourseDetailPage extends StatefulWidget {
@@ -465,13 +468,78 @@ class _CourseDetailPageState extends State<CourseDetailPage>
           padding: const EdgeInsets.only(bottom: 12.0),
           child: SpaceCard(
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>
-                      AssignmentDetailPage(assignment: assessment),
-                ),
-              );
+              if (isQuiz) {
+                // Navigate to Quiz flow
+                final quiz = QuizModel(
+                  id: assessment.id,
+                  title: assessment.title,
+                  description:
+                      assessment.description ??
+                      'Selesaikan kuis ini untuk menguji pemahaman Anda tentang materi yang telah dipelajari.',
+                  durationMinutes: 15,
+                  totalQuestions: 5,
+                  questions: [
+                    const QuizQuestionModel(
+                      id: 'q1',
+                      text:
+                          'Manakah dari berikut ini yang merupakan bahasa pemrograman utama untuk Flutter?',
+                      options: ['Java', 'Dart', 'Kotlin', 'Swift'],
+                      correctOptionIndex: 1,
+                    ),
+                    const QuizQuestionModel(
+                      id: 'q2',
+                      text: 'Apa singkatan dari SDK?',
+                      options: [
+                        'Software Development Kit',
+                        'System Design Kit',
+                        'Software Device Kit',
+                        'Simple Development Kit',
+                      ],
+                      correctOptionIndex: 0,
+                    ),
+                    const QuizQuestionModel(
+                      id: 'q3',
+                      text:
+                          'Widget mana yang digunakan untuk membuat layout kolom?',
+                      options: ['Row', 'Stack', 'Column', 'Container'],
+                      correctOptionIndex: 2,
+                    ),
+                    const QuizQuestionModel(
+                      id: 'q4',
+                      text: 'Apa fungsi dari `pubspec.yaml`?',
+                      options: [
+                        'Menyimpan aset',
+                        'Mengatur dependensi',
+                        'Mengatur tema',
+                        'Semua benar',
+                      ],
+                      correctOptionIndex: 3,
+                    ),
+                    const QuizQuestionModel(
+                      id: 'q5',
+                      text: 'Siapa pengembang Flutter?',
+                      options: ['Facebook', 'Google', 'Apple', 'Microsoft'],
+                      correctOptionIndex: 1,
+                    ),
+                  ],
+                );
+
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => QuizStartPage(quiz: quiz),
+                  ),
+                );
+              } else {
+                // Navigate to Assignment detail
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        AssignmentDetailPage(assignment: assessment),
+                  ),
+                );
+              }
             },
             child: Row(
               children: [
