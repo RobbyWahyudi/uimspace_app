@@ -32,26 +32,6 @@ class CourseMeeting {
   });
 }
 
-enum AssessmentType { assignment, quiz }
-
-class CourseAssessment {
-  final String id;
-  final String title;
-  final AssessmentType type;
-  final DateTime deadline;
-  final String? description;
-  final bool isSubmitted;
-
-  const CourseAssessment({
-    required this.id,
-    required this.title,
-    required this.type,
-    required this.deadline,
-    this.description,
-    this.isSubmitted = false,
-  });
-}
-
 class CourseProgress {
   final String id;
   final String name;

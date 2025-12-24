@@ -3,6 +3,8 @@ import 'package:uimspace_app/core/theme/space_theme.dart';
 import 'package:uimspace_app/core/widgets/space_card.dart';
 import 'package:uimspace_app/features/course/data/models/course_models.dart';
 import 'package:uimspace_app/core/widgets/space_components.dart';
+import 'package:uimspace_app/features/assignments/models/assignment_model.dart';
+import 'package:uimspace_app/features/assignments/presentation/assignment_detail_page.dart';
 import 'package:intl/intl.dart';
 
 class CourseDetailPage extends StatefulWidget {
@@ -83,26 +85,33 @@ class _CourseDetailPageState extends State<CourseDetailPage>
   ];
 
   // Dummy data for assessments
-  final List<CourseAssessment> _assessments = [
-    CourseAssessment(
+  final List<AssignmentModel> _assessments = [
+    AssignmentModel(
       id: 't1',
       title: 'Tugas 1: Analisis Konsep',
-      type: AssessmentType.assignment,
-      deadline: DateTime.now().add(const Duration(days: 2)),
+      type: AssignmentType.assignment,
+      deadline: DateTime.now().subtract(const Duration(days: 1)),
       description:
           'Menganalisis konsep yang telah dipelajari pada pertemuan 1 dan 2.',
+      isSubmitted: true,
+      submissionDate: DateTime.now().subtract(
+        const Duration(days: 1, hours: 2),
+      ),
+      fileName: 'Analisis_Konsep_Robby.pdf',
+      grade: 95.0,
+      feedback: 'Analisis sangat mendalam dan tepat sasaran. Bagus!',
     ),
-    CourseAssessment(
+    AssignmentModel(
       id: 'q1',
       title: 'Kuis 1: Dasar Teori',
-      type: AssessmentType.quiz,
+      type: AssignmentType.quiz,
       deadline: DateTime.now().add(const Duration(days: 4)),
       description: 'Kuis pilihan ganda mengenai materi pertemuan 1-3.',
     ),
-    CourseAssessment(
+    AssignmentModel(
       id: 't2',
       title: 'Tugas 2: Implementasi Mini Project',
-      type: AssessmentType.assignment,
+      type: AssignmentType.assignment,
       deadline: DateTime.now().add(const Duration(days: 10)),
       description: 'Membuat proyek kecil berdasarkan panduan praktikum.',
       isSubmitted: false,
@@ -446,7 +455,7 @@ class _CourseDetailPageState extends State<CourseDetailPage>
       itemCount: _assessments.length,
       itemBuilder: (context, index) {
         final assessment = _assessments[index];
-        final isQuiz = assessment.type == AssessmentType.quiz;
+        final isQuiz = assessment.type == AssignmentType.quiz;
         final isOverdue = assessment.deadline.isBefore(DateTime.now());
         final deadlineStr = DateFormat(
           'dd MMM yyyy, HH:mm',
@@ -456,10 +465,11 @@ class _CourseDetailPageState extends State<CourseDetailPage>
           padding: const EdgeInsets.only(bottom: 12.0),
           child: SpaceCard(
             onTap: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('Membuka detail ${isQuiz ? 'Kuis' : 'Tugas'}'),
-                  behavior: SnackBarBehavior.floating,
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      AssignmentDetailPage(assignment: assessment),
                 ),
               );
             },
@@ -510,6 +520,25 @@ class _CourseDetailPageState extends State<CourseDetailPage>
                           ),
                         ],
                       ),
+                      if (assessment.isGraded) ...[
+                        const SizedBox(height: 6),
+                        Text(
+                          'Dinilai: ${assessment.grade}',
+                          style: SpaceTextStyles.labelSmall.copyWith(
+                            color: SpaceColors.success,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ] else if (assessment.isSubmitted) ...[
+                        const SizedBox(height: 6),
+                        Text(
+                          'Terkirim',
+                          style: SpaceTextStyles.labelSmall.copyWith(
+                            color: SpaceColors.info,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
                     ],
                   ),
                 ),
