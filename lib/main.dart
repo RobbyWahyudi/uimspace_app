@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:uimspace_app/core/theme/space_theme.dart';
-import 'package:uimspace_app/navigation/bottom_navigation.dart';
+import 'package:uimspace_app/features/auth/presentation/login_page.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -36,7 +36,7 @@ class UIMSpaceApp extends StatelessWidget {
       themeMode: ThemeMode.dark,
 
       // Main navigation with bottom navigation bar
-      home: const MainNavigationShell(),
+      home: const LoginPage(),
     );
   }
 }
