@@ -83,7 +83,7 @@ class SpaceTextStyles {
   static const TextStyle titleLarge = TextStyle(
     fontFamily: fontFamily,
     fontSize: 22,
-    fontWeight: FontWeight.w500,
+    fontWeight: FontWeight.w600,
     letterSpacing: 0,
     height: 1.27,
     color: SpaceColors.textPrimary,
@@ -92,7 +92,7 @@ class SpaceTextStyles {
   static const TextStyle titleMedium = TextStyle(
     fontFamily: fontFamily,
     fontSize: 16,
-    fontWeight: FontWeight.w500,
+    fontWeight: FontWeight.w600,
     letterSpacing: 0.15,
     height: 1.50,
     color: SpaceColors.textPrimary,
@@ -101,7 +101,7 @@ class SpaceTextStyles {
   static const TextStyle titleSmall = TextStyle(
     fontFamily: fontFamily,
     fontSize: 14,
-    fontWeight: FontWeight.w500,
+    fontWeight: FontWeight.w600,
     letterSpacing: 0.1,
     height: 1.43,
     color: SpaceColors.textPrimary,

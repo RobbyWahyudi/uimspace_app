@@ -186,85 +186,32 @@ class _CourseProgressItem extends StatelessWidget {
 
   const _CourseProgressItem({required this.course, this.onTap});
 
-  Color get _progressColor {
-    final progress = course.progressPercentage;
-    if (progress >= 0.8) return SpaceColors.success;
-    if (progress >= 0.5) return SpaceColors.secondary;
-    if (progress >= 0.25) return SpaceColors.warning;
-    return SpaceColors.primary;
-  }
-
   @override
   Widget build(BuildContext context) {
-    final color = course.accentColor ?? _progressColor;
-
     return SpaceCard(
       onTap: onTap,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              // Course Icon
-              Container(
-                width: SpaceDimensions.iconXl,
-                height: SpaceDimensions.iconXl,
-                decoration: BoxDecoration(
-                  color: color.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(SpaceDimensions.radiusSm),
-                ),
-                child: Icon(
-                  Icons.book_outlined,
-                  color: color,
-                  size: SpaceDimensions.iconMd,
-                ),
-              ),
-              const SizedBox(width: SpaceDimensions.spacing12),
-              // Course info
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      course.code,
-                      style: SpaceTextStyles.labelSmall.copyWith(color: color),
-                    ),
-                    const SizedBox(height: SpaceDimensions.spacing2),
-                    Text(
-                      course.name,
-                      style: SpaceTextStyles.titleSmall,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ),
-              ),
-              // Grade badge
-              if (course.grade > 0)
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: SpaceDimensions.spacing12,
-                    vertical: SpaceDimensions.spacing6,
-                  ),
-                  decoration: BoxDecoration(
-                    color: SpaceColors.success.withValues(alpha: 0.15),
-                    borderRadius: SpaceDimensions.chipRadius,
-                  ),
-                  child: Text(
-                    course.grade.toStringAsFixed(1),
-                    style: SpaceTextStyles.labelLarge.copyWith(
-                      color: SpaceColors.success,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-            ],
+          // Course info
+          Text(
+            course.name,
+            style: SpaceTextStyles.titleSmall,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          const SizedBox(height: SpaceDimensions.spacing2),
+          Text(
+            course.code,
+            style: SpaceTextStyles.labelSmall.copyWith(
+              color: SpaceColors.textPrimary,
+            ),
           ),
           const SizedBox(height: SpaceDimensions.spacing12),
           // Progress bar
           SpaceProgressBar(
             value: course.progressPercentage,
-            color: color,
+            color: SpaceColors.primary,
             label:
                 '${course.completedModules} dari ${course.totalModules} modul selesai',
           ),

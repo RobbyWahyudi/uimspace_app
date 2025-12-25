@@ -4,6 +4,7 @@ import '../../../core/widgets/space_card.dart';
 import '../../../core/widgets/space_components.dart';
 import '../models/profile_model.dart';
 import 'profile_controller.dart';
+import 'edit_profile_page.dart';
 
 /// Halaman Profil (Profile)
 class ProfilePage extends StatefulWidget {
@@ -147,10 +148,11 @@ class _ProfilePageState extends State<ProfilePage> {
       actions: [
         IconButton(
           onPressed: () {
-            // Edit Profile Logic
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Fitur Edit Profil akan segera hadir!'),
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    EditProfilePage(user: user, controller: _controller),
               ),
             );
           },
@@ -298,10 +300,13 @@ class _ProfilePageState extends State<ProfilePage> {
         const SpaceSectionHeader(title: 'Akun'),
         SpaceCard(
           onTap: () {
-            // Edit Profil navigation
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Fitur Edit Profil akan segera hadir!'),
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => EditProfilePage(
+                  user: _controller.user,
+                  controller: _controller,
+                ),
               ),
             );
           },

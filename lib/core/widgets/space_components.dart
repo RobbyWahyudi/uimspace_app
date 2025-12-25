@@ -146,10 +146,22 @@ class SpaceSectionHeader extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(title, style: SpaceTextStyles.headlineSmall),
+          Text(
+            title,
+            style: SpaceTextStyles.titleMedium.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
           if (actionText != null || actionIcon != null)
             TextButton(
               onPressed: onAction,
+              style: TextButton.styleFrom(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: SpaceDimensions.spacing12,
+                  vertical: SpaceDimensions.spacing6,
+                ),
+                visualDensity: VisualDensity.compact,
+              ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [

@@ -136,8 +136,6 @@ class _UpcomingTaskItem extends StatelessWidget {
       return SpaceColors.error;
     } else if (difference.inHours < 24) {
       return SpaceColors.error;
-    } else if (difference.inDays <= 2) {
-      return SpaceColors.warning;
     } else {
       return SpaceColors.textSecondary;
     }

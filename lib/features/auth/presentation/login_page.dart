@@ -151,8 +151,17 @@ class _LoginPageState extends State<LoginPage> {
                       padding: const EdgeInsets.all(24),
                       decoration: BoxDecoration(
                         color: SpaceColors.surface.withValues(alpha: 0.5),
-                        borderRadius: BorderRadius.circular(24),
+                        borderRadius: BorderRadius.circular(
+                          SpaceDimensions.radius2xl,
+                        ),
                         border: Border.all(color: SpaceColors.border),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.2),
+                            blurRadius: 20,
+                            offset: const Offset(0, 10),
+                          ),
+                        ],
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -223,7 +232,9 @@ class _LoginPageState extends State<LoginPage> {
                               foregroundColor: Colors.white,
                               minimumSize: const Size(double.infinity, 56),
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(16),
+                                borderRadius: BorderRadius.circular(
+                                  SpaceDimensions.radiusMd,
+                                ),
                               ),
                               elevation: 0,
                             ),
@@ -324,11 +335,11 @@ class _LoginPageState extends State<LoginPage> {
           vertical: 16,
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(SpaceDimensions.radiusMd),
           borderSide: const BorderSide(color: SpaceColors.border),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(SpaceDimensions.radiusMd),
           borderSide: const BorderSide(color: SpaceColors.primary, width: 2),
         ),
       ),

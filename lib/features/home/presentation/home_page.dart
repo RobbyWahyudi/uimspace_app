@@ -44,21 +44,13 @@ class _HomePageState extends State<HomePage> {
       title: 'Kuis Basis Data',
       courseName: 'Basis Data',
       dueDate: DateTime.now().add(const Duration(days: 1, hours: 10)),
-      priority: TaskPriority.high,
+      priority: TaskPriority.normal,
       type: TaskType.quiz,
     ),
     UpcomingTask(
       id: '3',
-      title: 'Proyek Website E-Commerce',
+      title: 'UTS Pemrograman Web',
       courseName: 'Pemrograman Web',
-      dueDate: DateTime.now().add(const Duration(days: 3)),
-      priority: TaskPriority.normal,
-      type: TaskType.project,
-    ),
-    UpcomingTask(
-      id: '4',
-      title: 'UTS Matematika Diskrit',
-      courseName: 'Matematika Diskrit',
       dueDate: DateTime.now().add(const Duration(days: 7)),
       priority: TaskPriority.high,
       type: TaskType.exam,
@@ -200,7 +192,7 @@ class _HomePageState extends State<HomePage> {
                 ),
 
                 // Bottom padding for navigation bar
-                const SizedBox(height: SpaceDimensions.spacing32),
+                // const SizedBox(height: SpaceDimensions.spacing32),
               ],
             ),
           ),

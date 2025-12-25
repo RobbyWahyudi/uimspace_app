@@ -104,20 +104,6 @@ class _AnnouncementItem extends StatelessWidget {
     AnnouncementType.info => SpaceColors.info,
   };
 
-  IconData get _typeIcon => switch (announcement.type) {
-    AnnouncementType.urgent => Icons.priority_high_rounded,
-    AnnouncementType.important => Icons.star_rounded,
-    AnnouncementType.event => Icons.event_rounded,
-    AnnouncementType.info => Icons.info_outline_rounded,
-  };
-
-  String get _typeLabel => switch (announcement.type) {
-    AnnouncementType.urgent => 'Mendesak',
-    AnnouncementType.important => 'Penting',
-    AnnouncementType.event => 'Acara',
-    AnnouncementType.info => 'Info',
-  };
-
   String _formatDate(DateTime date) {
     final now = DateTime.now();
     final difference = now.difference(date);
@@ -148,56 +134,30 @@ class _AnnouncementItem extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Title and unread indicator
           Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Type indicator
-              Container(
-                padding: const EdgeInsets.all(SpaceDimensions.spacing8),
-                decoration: BoxDecoration(
-                  color: _typeColor.withValues(alpha: 0.15),
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(
-                  _typeIcon,
-                  color: _typeColor,
-                  size: SpaceDimensions.iconMd,
-                ),
-              ),
-              const SizedBox(width: SpaceDimensions.spacing12),
-              // Title and type badge
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        SpaceBadge(
-                          text: _typeLabel,
-                          backgroundColor: _typeColor,
-                        ),
-                        if (!announcement.isRead) ...[
-                          const SizedBox(width: SpaceDimensions.spacing8),
-                          Container(
-                            width: 8,
-                            height: 8,
-                            decoration: BoxDecoration(
-                              color: SpaceColors.secondary,
-                              shape: BoxShape.circle,
-                            ),
-                          ),
-                        ],
-                      ],
-                    ),
-                    const SizedBox(height: SpaceDimensions.spacing6),
-                    Text(
-                      announcement.title,
-                      style: SpaceTextStyles.titleSmall,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
+                child: Text(
+                  announcement.title,
+                  style: SpaceTextStyles.titleSmall,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
+              if (!announcement.isRead) ...[
+                const SizedBox(width: SpaceDimensions.spacing8),
+                Container(
+                  margin: const EdgeInsets.only(top: 6),
+                  width: 8,
+                  height: 8,
+                  decoration: const BoxDecoration(
+                    color: SpaceColors.primary,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+              ],
             ],
           ),
           const SizedBox(height: SpaceDimensions.spacing12),
