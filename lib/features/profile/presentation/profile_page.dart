@@ -5,6 +5,7 @@ import '../../../core/widgets/space_components.dart';
 import '../models/profile_model.dart';
 import 'profile_controller.dart';
 import 'edit_profile_page.dart';
+import '../../auth/presentation/login_page.dart';
 
 /// Halaman Profil (Profile)
 class ProfilePage extends StatefulWidget {
@@ -36,10 +37,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     children: [
                       _buildPersonalInfoSection(user),
                       const SizedBox(height: SpaceDimensions.spacing24),
-                      _buildLoginHistorySection(),
-                      const SizedBox(height: SpaceDimensions.spacing24),
                       _buildAccountActionsSection(context),
-                      const SizedBox(height: SpaceDimensions.spacing40),
                     ],
                   ),
                 ),
@@ -106,6 +104,8 @@ class _ProfilePageState extends State<ProfilePage> {
                         name: user.name,
                         imageUrl: user.avatarUrl,
                         size: 100,
+                        backgroundColor: SpaceColors.primary,
+                        iconColor: Colors.white,
                       ),
                     ),
                     Positioned(
@@ -241,58 +241,6 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Widget _buildLoginHistorySection() {
-    final history = _controller.loginHistory;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SpaceSectionHeader(title: 'Riwayat Login'),
-        SpaceCard(
-          padding: EdgeInsets.zero,
-          child: Column(
-            children: List.generate(history.length, (index) {
-              final item = history[index];
-              return Column(
-                children: [
-                  ListTile(
-                    leading: Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: SpaceColors.secondary.withValues(alpha: 0.1),
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(
-                        item.deviceName.contains('Chrome')
-                            ? Icons.laptop_windows_rounded
-                            : Icons.phone_android_rounded,
-                        color: SpaceColors.secondary,
-                        size: 20,
-                      ),
-                    ),
-                    title: Text(
-                      item.deviceName,
-                      style: SpaceTextStyles.titleSmall,
-                    ),
-                    subtitle: Text(
-                      '${item.ipAddress} • ${item.location}',
-                      style: SpaceTextStyles.bodySmall,
-                    ),
-                    trailing: Text(
-                      _formatDate(item.loginTime),
-                      style: SpaceTextStyles.labelSmall,
-                    ),
-                  ),
-                  if (index != history.length - 1)
-                    const SpaceDivider(margin: EdgeInsets.zero),
-                ],
-              );
-            }),
-          ),
-        ),
-      ],
-    );
-  }
-
   Widget _buildAccountActionsSection(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -316,6 +264,72 @@ class _ProfilePageState extends State<ProfilePage> {
               const SizedBox(width: SpaceDimensions.spacing16),
               Expanded(
                 child: Text('Edit Profil', style: SpaceTextStyles.titleSmall),
+              ),
+              Icon(Icons.chevron_right, color: SpaceColors.textSecondary),
+            ],
+          ),
+        ),
+        const SizedBox(height: SpaceDimensions.spacing12),
+        SpaceCard(
+          onTap: () {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Fitur ini belum tersedia'),
+                behavior: SnackBarBehavior.floating,
+              ),
+            );
+          },
+          child: Row(
+            children: [
+              Icon(Icons.history_rounded, color: SpaceColors.textPrimary),
+              const SizedBox(width: SpaceDimensions.spacing16),
+              Expanded(
+                child: Text('Riwayat Login', style: SpaceTextStyles.titleSmall),
+              ),
+              Icon(Icons.chevron_right, color: SpaceColors.textSecondary),
+            ],
+          ),
+        ),
+        const SizedBox(height: SpaceDimensions.spacing12),
+        SpaceCard(
+          onTap: () {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Fitur ini belum tersedia'),
+                behavior: SnackBarBehavior.floating,
+              ),
+            );
+          },
+          child: Row(
+            children: [
+              Icon(Icons.settings_outlined, color: SpaceColors.textPrimary),
+              const SizedBox(width: SpaceDimensions.spacing16),
+              Expanded(
+                child: Text(
+                  'Pengaturan Sistem',
+                  style: SpaceTextStyles.titleSmall,
+                ),
+              ),
+              Icon(Icons.chevron_right, color: SpaceColors.textSecondary),
+            ],
+          ),
+        ),
+        const SizedBox(height: SpaceDimensions.spacing12),
+        SpaceCard(
+          onTap: () {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Fitur ini belum tersedia'),
+                behavior: SnackBarBehavior.floating,
+              ),
+            );
+          },
+          child: Row(
+            children: [
+              Icon(Icons.help_outline_outlined, color: SpaceColors.textPrimary),
+              const SizedBox(width: SpaceDimensions.spacing16),
+              Expanded(
+                child: Text('Pusat Bantuan', style: SpaceTextStyles.titleSmall),
               ),
               Icon(Icons.chevron_right, color: SpaceColors.textSecondary),
             ],
@@ -360,21 +374,17 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           TextButton(
             onPressed: () {
-              Navigator.pop(context);
               _controller.logout();
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => const LoginPage()),
+                (route) => false,
+              );
             },
             child: Text('Keluar', style: TextStyle(color: SpaceColors.error)),
           ),
         ],
       ),
     );
-  }
-
-  String _formatDate(DateTime date) {
-    final now = DateTime.now();
-    final diff = now.difference(date);
-    if (diff.inMinutes < 60) return '${diff.inMinutes}m yang lalu';
-    if (diff.inHours < 24) return '${diff.inHours}j yang lalu';
-    return '${date.day}/${date.month}/${date.year}';
   }
 }

@@ -7,6 +7,7 @@ class SpaceAvatar extends StatelessWidget {
   final String? name;
   final double size;
   final Color? backgroundColor;
+  final Color? iconColor;
   final VoidCallback? onTap;
 
   const SpaceAvatar({
@@ -15,6 +16,7 @@ class SpaceAvatar extends StatelessWidget {
     this.name,
     this.size = SpaceDimensions.avatarMd,
     this.backgroundColor,
+    this.iconColor,
     this.onTap,
   });
 
@@ -32,12 +34,10 @@ class SpaceAvatar extends StatelessWidget {
       ),
       child: imageUrl == null
           ? Center(
-              child: Text(
-                _getInitials(name ?? '?'),
-                style: SpaceTextStyles.titleMedium.copyWith(
-                  color: SpaceColors.primary,
-                  fontSize: size * 0.4,
-                ),
+              child: Icon(
+                Icons.person_rounded,
+                color: iconColor ?? SpaceColors.primary,
+                size: size * 0.6,
               ),
             )
           : null,
@@ -48,15 +48,6 @@ class SpaceAvatar extends StatelessWidget {
     }
 
     return avatar;
-  }
-
-  String _getInitials(String name) {
-    if (name.isEmpty) return '?';
-    final parts = name.trim().split(' ');
-    if (parts.length >= 2) {
-      return '${parts[0][0]}${parts[1][0]}'.toUpperCase();
-    }
-    return name[0].toUpperCase();
   }
 }
 

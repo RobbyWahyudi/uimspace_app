@@ -41,6 +41,10 @@ class _LoginPageState extends State<LoginPage> {
         if (password == 'asdf') {
           _showError('Password SSO salah. Silakan periksa kembali.');
         } else {
+          // Clear any active SnackBars before navigating to prevent them
+          // from appearing on the next screen or causing crashes if interacted with.
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
@@ -53,6 +57,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _showHelpDialog() {
+    if (!mounted) return;
     showDialog(
       context: context,
       builder: (context) {
