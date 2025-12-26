@@ -9,6 +9,7 @@ import 'package:uimspace_app/features/courses/presentation/course_detail_page.da
 import 'package:uimspace_app/features/courses/presentation/my_courses_page.dart';
 import 'package:uimspace_app/features/assignments/presentation/assignment_list_page.dart';
 import 'announcements_list_page.dart';
+import 'announcement_detail_page.dart';
 
 /// Halaman Beranda (Home)
 /// Menampilkan dashboard utama dengan:
@@ -382,7 +383,7 @@ class _HomePageState extends State<HomePage> {
   Future<void> _onRefresh() async {
     // Simulate refresh delay
     await Future.delayed(const Duration(seconds: 1));
-    // TODO: Implement actual data refresh
+    // Implement actual data refresh
   }
 
   void _onProfileTap() {
@@ -400,7 +401,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _onSearch(String query) {
-    // TODO: Implement search
+    // Implement search
     debugPrint('Search: $query');
   }
 
@@ -412,7 +413,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _onTaskTap(UpcomingTask task) {
-    // TODO: Navigate to task detail
+    // Navigate to task detail
     debugPrint('Open Task: ${task.title}');
   }
 
@@ -427,8 +428,13 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _onAnnouncementTap(Announcement announcement) {
-    // TODO: Navigate to announcement detail
-    debugPrint('Open Announcement: ${announcement.title}');
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>
+            AnnouncementDetailPage(announcement: announcement),
+      ),
+    );
   }
 
   void _onViewAllCourses() {

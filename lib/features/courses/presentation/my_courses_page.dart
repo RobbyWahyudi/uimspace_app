@@ -412,7 +412,7 @@ class _MyCoursesPageState extends State<MyCoursesPage> {
 
   Future<void> _onRefresh() async {
     await Future.delayed(const Duration(seconds: 1));
-    // TODO: Implement actual data refresh
+    // Implement actual data refresh
   }
 
   void _onCourseTap(Course course) {

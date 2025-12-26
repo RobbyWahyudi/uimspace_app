@@ -3,6 +3,7 @@ import 'package:uimspace_app/core/theme/space_theme.dart';
 import 'package:uimspace_app/core/widgets/space_card.dart';
 import 'widgets/announcements_section.dart';
 import 'package:intl/intl.dart';
+import 'announcement_detail_page.dart';
 
 class AnnouncementsListPage extends StatefulWidget {
   final List<Announcement> announcements;
@@ -170,7 +171,13 @@ class _AnnouncementListCard extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 12.0),
       child: SpaceCard(
         onTap: () {
-          // Navigate to detail
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  AnnouncementDetailPage(announcement: announcement),
+            ),
+          );
         },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
