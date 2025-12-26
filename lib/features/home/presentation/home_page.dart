@@ -6,6 +6,9 @@ import 'package:uimspace_app/features/notifications/presentation/notification_pa
 import 'package:uimspace_app/features/profile/presentation/profile_page.dart';
 import 'package:uimspace_app/features/courses/models/course_model.dart';
 import 'package:uimspace_app/features/courses/presentation/course_detail_page.dart';
+import 'package:uimspace_app/features/courses/presentation/my_courses_page.dart';
+import 'package:uimspace_app/features/assignments/presentation/assignment_list_page.dart';
+import 'announcements_list_page.dart';
 
 /// Halaman Beranda (Home)
 /// Menampilkan dashboard utama dengan:
@@ -15,7 +18,8 @@ import 'package:uimspace_app/features/courses/presentation/course_detail_page.da
 /// - Pengumuman terbaru
 /// - Ringkasan progres kelas
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final void Function(int)? onTabChangeRequested;
+  const HomePage({super.key, this.onTabChangeRequested});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -401,8 +405,10 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _onViewAllTasks() {
-    // TODO: Navigate to all tasks page
-    debugPrint('View All Tasks');
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const AssignmentListPage()),
+    );
   }
 
   void _onTaskTap(UpcomingTask task) {
@@ -411,8 +417,13 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _onViewAllAnnouncements() {
-    // TODO: Navigate to all announcements page
-    debugPrint('View All Announcements');
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>
+            AnnouncementsListPage(announcements: _announcements),
+      ),
+    );
   }
 
   void _onAnnouncementTap(Announcement announcement) {
@@ -421,8 +432,15 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _onViewAllCourses() {
-    // TODO: Navigate to all courses page
-    debugPrint('View All Courses');
+    if (widget.onTabChangeRequested != null) {
+      widget.onTabChangeRequested!(1); // Index 1 is MyCoursesPage
+    } else {
+      // Fallback if callback is not provided
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const MyCoursesPage()),
+      );
+    }
   }
 
   void _onCourseTap(CourseProgress course) {

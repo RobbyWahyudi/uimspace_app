@@ -49,19 +49,23 @@ class AnnouncementsSection extends StatelessWidget {
           actionText: 'Lihat Semua',
           onAction: onViewAll,
         ),
-        if (announcements.isEmpty)
+        if (announcements.where((a) => !a.isRead).isEmpty)
           _buildEmptyState()
         else
           ListView.separated(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: announcements.length > 2 ? 2 : announcements.length,
+            itemCount: 1, // Focus on only one latest unread
             separatorBuilder: (context, index) =>
                 const SizedBox(height: SpaceDimensions.spacing12),
             itemBuilder: (context, index) {
+              final unreadAnnouncements = announcements
+                  .where((a) => !a.isRead)
+                  .toList();
               return _AnnouncementItem(
-                announcement: announcements[index],
-                onTap: () => onAnnouncementTap?.call(announcements[index]),
+                announcement: unreadAnnouncements[index],
+                onTap: () =>
+                    onAnnouncementTap?.call(unreadAnnouncements[index]),
               );
             },
           ),

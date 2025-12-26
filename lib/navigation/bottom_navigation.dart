@@ -30,11 +30,17 @@ class _MainNavigationShellState extends State<MainNavigationShell> {
   int _currentIndex = 0;
 
   // Daftar halaman
-  final List<Widget> _pages = const [
-    HomePage(),
-    MyCoursesPage(),
-    ProfilePage(),
-  ];
+  late final List<Widget> _pages;
+
+  @override
+  void initState() {
+    super.initState();
+    _pages = [
+      HomePage(onTabChangeRequested: _onNavItemTapped),
+      const MyCoursesPage(),
+      const ProfilePage(),
+    ];
+  }
 
   // Daftar item navigasi
   final List<NavItem> _navItems = const [
