@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/gestures.dart';
 import 'package:uimspace_app/core/theme/space_theme.dart';
 import 'package:uimspace_app/navigation/bottom_navigation.dart';
 
@@ -51,6 +52,169 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
+  void _showHelpDialog() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return DefaultTabController(
+          length: 2,
+          child: Dialog(
+            backgroundColor: SpaceColors.surface,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(SpaceDimensions.radiusLg),
+              side: const BorderSide(color: SpaceColors.border),
+            ),
+            child: Container(
+              width: MediaQuery.of(context).size.width * 0.9,
+              constraints: const BoxConstraints(maxHeight: 500),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Tab Bar Header
+                  Container(
+                    decoration: BoxDecoration(
+                      color: SpaceColors.surfaceVariant.withValues(alpha: 0.5),
+                      borderRadius: const BorderRadius.vertical(
+                        top: Radius.circular(SpaceDimensions.radiusLg),
+                      ),
+                    ),
+                    child: Column(
+                      children: [
+                        const TabBar(
+                          dividerColor: Colors.transparent,
+                          indicatorColor: SpaceColors.primary,
+                          labelColor: SpaceColors.primary,
+                          unselectedLabelColor: SpaceColors.textSecondary,
+                          tabs: [
+                            Tab(text: 'INDONESIA'),
+                            Tab(text: 'ENGLISH'),
+                          ],
+                        ),
+                        Container(height: 1, color: SpaceColors.border),
+                      ],
+                    ),
+                  ),
+
+                  // Tab Content
+                  Flexible(
+                    child: TabBarView(
+                      children: [
+                        _buildHelpContent(isEnglish: false),
+                        _buildHelpContent(isEnglish: true),
+                      ],
+                    ),
+                  ),
+
+                  // Footer
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: ElevatedButton(
+                      onPressed: () => Navigator.pop(context),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: SpaceColors.surfaceVariant,
+                        foregroundColor: SpaceColors.textPrimary,
+                        minimumSize: const Size(double.infinity, 44),
+                      ),
+                      child: const Text('Tutup'),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildHelpContent({required bool isEnglish}) {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(24.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildHelpSection(
+            isEnglish ? 'Access Control' : 'Kontrol Akses',
+            isEnglish
+                ? 'Access is only for Lecturers and Students of Universitas Islam Madura.'
+                : 'Akses hanya untuk Dosen dan Mahasiswa Universitas Islam Madura.',
+          ),
+          const SizedBox(height: 16),
+          _buildHelpSection(
+            isEnglish ? 'Login Instructions' : 'Instruksi Login',
+            isEnglish
+                ? 'Login using SIMAT Account by following these instructions:\n\n'
+                      '• Username (SIMAT Account) + "@uim.ac.id"\n'
+                      '• Password (SIMAT Account) in the Password field.'
+                : 'Login menggunakan Akun SIMAT dengan mengikuti petunjuk berikut:\n\n'
+                      '• Username (Akun SIMAT) ditambahkan "@uim.ac.id"\n'
+                      '• Password (Akun SIMAT) pada kolom Password.',
+          ),
+          const SizedBox(height: 16),
+          _buildHelpSection(
+            isEnglish ? 'Authentication Issue' : 'Masalah Autentikasi',
+            isEnglish
+                ? 'Failed authentication is often caused by not changing your password to a "Strong Password".\n\n'
+                      'Make sure you have changed your password in SIMAT system.'
+                : 'Kegagalan yang terjadi pada Autentikasi disebabkan oleh Anda belum mengubah Password Anda menjadi "Strong Password".\n\n'
+                      'Pastikan Anda telah melakukan perubahan Password di SIMAT.',
+          ),
+          const SizedBox(height: 24),
+          const Divider(color: SpaceColors.border),
+          const SizedBox(height: 16),
+          Text(
+            isEnglish ? 'Contact Helpdesk' : 'Hubungi Helpdesk',
+            style: SpaceTextStyles.titleSmall.copyWith(
+              fontWeight: FontWeight.bold,
+              color: SpaceColors.primary,
+            ),
+          ),
+          const SizedBox(height: 12),
+          _buildContactItem(Icons.email_outlined, 'uimspace@uim.ac.id'),
+          const SizedBox(height: 8),
+          _buildContactItem(Icons.chat_rounded, '+62 821-1666-3563'),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildHelpSection(String title, String content) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: SpaceTextStyles.bodyMedium.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          content,
+          style: SpaceTextStyles.bodySmall.copyWith(
+            color: SpaceColors.textSecondary,
+            height: 1.5,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildContactItem(IconData icon, String text) {
+    return Row(
+      children: [
+        Icon(icon, size: 16, color: SpaceColors.textSecondary),
+        const SizedBox(width: 12),
+        Text(
+          text,
+          style: SpaceTextStyles.bodySmall.copyWith(
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ],
+    );
+  }
+
   void _showError(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -67,9 +231,7 @@ class _LoginPageState extends State<LoginPage> {
         action: SnackBarAction(
           label: 'Bantuan',
           textColor: Colors.white,
-          onPressed: () {
-            // Mock help action
-          },
+          onPressed: _showHelpDialog,
         ),
       ),
     );
@@ -116,13 +278,12 @@ class _LoginPageState extends State<LoginPage> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     // Logo Section
-                    const Center(
+                    Center(
                       child: Hero(
                         tag: 'logo',
-                        child: Icon(
-                          Icons.auto_awesome_rounded,
-                          size: 80,
-                          color: SpaceColors.primary,
+                        child: Image.asset(
+                          'assets/images/logo.png',
+                          height: 100,
                         ),
                       ),
                     ),
@@ -138,7 +299,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     Center(
                       child: Text(
-                        'Management Learning System',
+                        'Learning Management System',
                         style: SpaceTextStyles.bodyMedium.copyWith(
                           color: SpaceColors.textSecondary,
                         ),
@@ -174,7 +335,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            'Masuk menggunakan akun universitas Anda.',
+                            'Masuk menggunakan akun SIMAT Anda.',
                             style: SpaceTextStyles.bodySmall.copyWith(
                               color: SpaceColors.textSecondary,
                             ),
@@ -182,18 +343,18 @@ class _LoginPageState extends State<LoginPage> {
                           const SizedBox(height: 32),
 
                           // Email Field
-                          _buildLabel('Email Institusi'),
+                          _buildLabel('Email'),
                           const SizedBox(height: 8),
                           _buildTextField(
                             controller: _emailController,
-                            hintText: 'nim@uim.ac.id',
+                            hintText: 'username@uim.ac.id',
                             icon: Icons.alternate_email_rounded,
                             keyboardType: TextInputType.emailAddress,
                           ),
                           const SizedBox(height: 20),
 
                           // Password Field
-                          _buildLabel('Password SSO'),
+                          _buildLabel('Password'),
                           const SizedBox(height: 8),
                           _buildTextField(
                             controller: _passwordController,
@@ -211,8 +372,15 @@ class _LoginPageState extends State<LoginPage> {
 
                           Align(
                             alignment: Alignment.centerRight,
-                            child: TextButton(
-                              onPressed: () {},
+                            child: GestureDetector(
+                              onTap: () {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Fitur ini belum tersedia'),
+                                    behavior: SnackBarBehavior.floating,
+                                  ),
+                                );
+                              },
                               child: Text(
                                 'Lupa Password?',
                                 style: SpaceTextStyles.bodySmall.copyWith(
@@ -248,7 +416,7 @@ class _LoginPageState extends State<LoginPage> {
                                     ),
                                   )
                                 : Text(
-                                    'Masuk Ke Akun',
+                                    'Masuk',
                                     style: SpaceTextStyles.titleSmall.copyWith(
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -270,10 +438,12 @@ class _LoginPageState extends State<LoginPage> {
                             const TextSpan(text: 'Butuh bantuan? '),
                             TextSpan(
                               text: 'Hubungi IT Support',
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: SpaceColors.primary,
                                 fontWeight: FontWeight.bold,
                               ),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = _showHelpDialog,
                             ),
                           ],
                         ),
