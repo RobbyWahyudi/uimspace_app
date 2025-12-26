@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:uimspace_app/core/theme/space_theme.dart';
 import 'package:uimspace_app/core/widgets/space_card.dart';
 import 'package:uimspace_app/core/widgets/space_components.dart';
-import 'package:uimspace_app/features/course/data/models/course_models.dart';
+import 'package:uimspace_app/features/courses/models/course_model.dart';
 
 /// Widget untuk menampilkan ringkasan progres kelas
 class ClassProgressSection extends StatelessWidget {

@@ -133,7 +133,10 @@ class SpaceSectionHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: SpaceDimensions.spacing8),
+      padding: const EdgeInsets.only(
+        top: SpaceDimensions.spacing8,
+        bottom: SpaceDimensions.spacing16,
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -144,21 +147,25 @@ class SpaceSectionHeader extends StatelessWidget {
             ),
           ),
           if (actionText != null || actionIcon != null)
-            TextButton(
-              onPressed: onAction,
-              style: TextButton.styleFrom(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: SpaceDimensions.spacing12,
-                  vertical: SpaceDimensions.spacing6,
-                ),
-                visualDensity: VisualDensity.compact,
-              ),
+            GestureDetector(
+              onTap: onAction,
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  if (actionText != null) Text(actionText!),
+                  if (actionText != null)
+                    Text(
+                      actionText!,
+                      style: SpaceTextStyles.bodySmall.copyWith(
+                        color: SpaceColors.primary,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   if (actionIcon != null)
-                    Icon(actionIcon, size: SpaceDimensions.iconMd),
+                    Icon(
+                      actionIcon,
+                      size: SpaceDimensions.iconMd,
+                      color: SpaceColors.primary,
+                    ),
                 ],
               ),
             ),

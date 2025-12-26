@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:uimspace_app/core/theme/space_theme.dart';
 import 'package:uimspace_app/core/widgets/space_card.dart';
 import '../models/course_model.dart';
+import 'course_detail_page.dart';
 
 /// Halaman Kelas Saya (My Courses)
 /// Menampilkan seluruh mata kuliah yang diambil dengan:
@@ -172,7 +173,7 @@ class _MyCoursesPageState extends State<MyCoursesPage> {
                         children: [
                           Text(
                             'Kelas Saya',
-                            style: SpaceTextStyles.headlineLarge,
+                            style: SpaceTextStyles.headlineSmall,
                           ),
                           IconButton(
                             onPressed: _showSortOptions,
@@ -183,13 +184,6 @@ class _MyCoursesPageState extends State<MyCoursesPage> {
                             tooltip: 'Urutkan',
                           ),
                         ],
-                      ),
-                      const SizedBox(height: SpaceDimensions.spacing4),
-                      Text(
-                        '${_courses.length} mata kuliah aktif semester ini',
-                        style: SpaceTextStyles.bodyMedium.copyWith(
-                          color: SpaceColors.textSecondary,
-                        ),
                       ),
                       const SizedBox(height: SpaceDimensions.spacing16),
 
@@ -231,11 +225,6 @@ class _MyCoursesPageState extends State<MyCoursesPage> {
                         }, childCount: _filteredCourses.length),
                       ),
                     ),
-
-              // Bottom padding
-              const SliverToBoxAdapter(
-                child: SizedBox(height: SpaceDimensions.spacing32),
-              ),
             ],
           ),
         ),
@@ -320,7 +309,7 @@ class _MyCoursesPageState extends State<MyCoursesPage> {
             icon: Icons.library_books_rounded,
             label: 'Modul',
             value: '$completedModules/$totalModules',
-            color: SpaceColors.secondary,
+            color: SpaceColors.primary,
           ),
         ),
         const SizedBox(width: SpaceDimensions.spacing12),
@@ -329,7 +318,7 @@ class _MyCoursesPageState extends State<MyCoursesPage> {
             icon: Icons.credit_score_rounded,
             label: 'SKS',
             value: '$totalCredits',
-            color: SpaceColors.warning,
+            color: SpaceColors.primary,
           ),
         ),
       ],
@@ -427,58 +416,66 @@ class _MyCoursesPageState extends State<MyCoursesPage> {
   }
 
   void _onCourseTap(Course course) {
-    // TODO: Navigate to course detail
-    debugPrint('Open Course: ${course.name}');
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CourseDetailPage(
+          course: CourseProgress(
+            id: course.id,
+            name: course.name,
+            code: course.code,
+            completedModules: course.completedModules,
+            totalModules: course.totalModules,
+            grade: course.grade ?? 0,
+            accentColor: course.accentColor,
+          ),
+        ),
+      ),
+    );
   }
 
   void _showSortOptions() {
     showModalBottomSheet(
       context: context,
       backgroundColor: SpaceColors.surface,
+      useSafeArea: true,
+      isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: SpaceDimensions.bottomSheetRadius,
       ),
-      builder: (context) => Padding(
-        padding: SpaceDimensions.screenPadding,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Center(
-              child: Container(
-                width: 40,
-                height: 4,
-                decoration: BoxDecoration(
-                  color: SpaceColors.textSecondary,
-                  borderRadius: BorderRadius.circular(2),
-                ),
+      builder: (context) => SafeArea(
+        child: Padding(
+          padding: SpaceDimensions.screenPadding,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: SpaceDimensions.spacing16),
+              Text('Urutkan Berdasarkan', style: SpaceTextStyles.titleMedium),
+              const SizedBox(height: SpaceDimensions.spacing16),
+              _SortOption(
+                icon: Icons.sort_by_alpha_rounded,
+                label: 'Nama (A-Z)',
+                onTap: () => Navigator.pop(context),
               ),
-            ),
-            const SizedBox(height: SpaceDimensions.spacing16),
-            Text('Urutkan Berdasarkan', style: SpaceTextStyles.titleMedium),
-            const SizedBox(height: SpaceDimensions.spacing16),
-            _SortOption(
-              icon: Icons.sort_by_alpha_rounded,
-              label: 'Nama (A-Z)',
-              onTap: () => Navigator.pop(context),
-            ),
-            _SortOption(
-              icon: Icons.trending_up_rounded,
-              label: 'Progress Tertinggi',
-              onTap: () => Navigator.pop(context),
-            ),
-            _SortOption(
-              icon: Icons.trending_down_rounded,
-              label: 'Progress Terendah',
-              onTap: () => Navigator.pop(context),
-            ),
-            _SortOption(
-              icon: Icons.access_time_rounded,
-              label: 'Terakhir Diakses',
-              onTap: () => Navigator.pop(context),
-            ),
-            const SizedBox(height: SpaceDimensions.spacing16),
-          ],
+              _SortOption(
+                icon: Icons.trending_up_rounded,
+                label: 'Progress Tertinggi',
+                onTap: () => Navigator.pop(context),
+              ),
+              _SortOption(
+                icon: Icons.trending_down_rounded,
+                label: 'Progress Terendah',
+                onTap: () => Navigator.pop(context),
+              ),
+              _SortOption(
+                icon: Icons.access_time_rounded,
+                label: 'Terakhir Diakses',
+                onTap: () => Navigator.pop(context),
+              ),
+              const SizedBox(height: SpaceDimensions.spacing16),
+            ],
+          ),
         ),
       ),
     );
@@ -546,132 +543,66 @@ class _CourseCard extends StatelessWidget {
 
   Color get _progressColor {
     if (course.isCompleted) return SpaceColors.success;
-    if (course.progressPercentage >= 0.75) return SpaceColors.success;
-    if (course.progressPercentage >= 0.5) return SpaceColors.secondary;
-    if (course.progressPercentage >= 0.25) return SpaceColors.warning;
     return SpaceColors.primary;
+  }
+
+  Color get _statusColor {
+    if (course.isCompleted) return SpaceColors.success;
+    return SpaceColors.textSecondary;
   }
 
   @override
   Widget build(BuildContext context) {
-    final color = course.accentColor ?? _progressColor;
+    final color = _progressColor;
+    final statusColor = _statusColor;
 
     return SpaceCard(
       onTap: onTap,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Course Icon
-              Container(
-                width: SpaceDimensions.icon3xl,
-                height: SpaceDimensions.icon3xl,
-                decoration: BoxDecoration(
-                  color: color.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(SpaceDimensions.radiusSm),
-                ),
-                child: Icon(
-                  Icons.class_rounded,
-                  color: color,
-                  size: SpaceDimensions.iconLg,
-                ),
-              ),
-              const SizedBox(width: SpaceDimensions.spacing12),
-
-              // Course Info
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Code Badge
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: SpaceDimensions.spacing8,
-                        vertical: SpaceDimensions.spacing2,
-                      ),
-                      decoration: BoxDecoration(
-                        color: color.withValues(alpha: 0.15),
-                        borderRadius: SpaceDimensions.chipRadius,
-                      ),
-                      child: Text(
-                        course.code,
-                        style: SpaceTextStyles.labelSmall.copyWith(
-                          color: color,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: SpaceDimensions.spacing6),
-
-                    // Course Name
-                    Text(
-                      course.name,
-                      style: SpaceTextStyles.titleMedium.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-
-                    // Instructor
-                    if (course.instructor != null) ...[
-                      const SizedBox(height: SpaceDimensions.spacing4),
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.person_outline_rounded,
-                            size: SpaceDimensions.iconSm,
-                            color: SpaceColors.textSecondary,
-                          ),
-                          const SizedBox(width: SpaceDimensions.spacing4),
-                          Expanded(
-                            child: Text(
-                              course.instructor!,
-                              style: SpaceTextStyles.bodySmall,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ],
-                ),
-              ),
-
-              // Grade Badge
-              if (course.grade != null && course.grade! > 0)
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: SpaceDimensions.spacing12,
-                    vertical: SpaceDimensions.spacing8,
-                  ),
-                  decoration: BoxDecoration(
-                    color: SpaceColors.success.withValues(alpha: 0.15),
-                    borderRadius: SpaceDimensions.chipRadius,
-                  ),
-                  child: Column(
-                    children: [
-                      Text(
-                        course.grade!.toStringAsFixed(1),
-                        style: SpaceTextStyles.titleMedium.copyWith(
-                          color: SpaceColors.success,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        'Nilai',
-                        style: SpaceTextStyles.labelSmall.copyWith(
-                          color: SpaceColors.success,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-            ],
+          // Course Name
+          Text(
+            course.name,
+            style: SpaceTextStyles.titleMedium.copyWith(
+              fontWeight: FontWeight.w600,
+            ),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
           ),
+          const SizedBox(height: SpaceDimensions.spacing4),
+
+          // Course Code
+          Text(
+            course.code,
+            style: SpaceTextStyles.labelSmall.copyWith(
+              color: Colors.white,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+
+          // Instructor
+          if (course.instructor != null) ...[
+            const SizedBox(height: SpaceDimensions.spacing8),
+            Row(
+              children: [
+                Icon(
+                  Icons.person_outline_rounded,
+                  size: SpaceDimensions.iconSm,
+                  color: SpaceColors.textSecondary,
+                ),
+                const SizedBox(width: SpaceDimensions.spacing4),
+                Expanded(
+                  child: Text(
+                    course.instructor!,
+                    style: SpaceTextStyles.bodySmall,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
+          ],
 
           const SizedBox(height: SpaceDimensions.spacing16),
 
@@ -719,13 +650,13 @@ class _CourseCard extends StatelessWidget {
                   vertical: SpaceDimensions.spacing4,
                 ),
                 decoration: BoxDecoration(
-                  color: _progressColor.withValues(alpha: 0.15),
+                  color: statusColor.withValues(alpha: 0.15),
                   borderRadius: SpaceDimensions.chipRadius,
                 ),
                 child: Text(
                   course.statusText,
                   style: SpaceTextStyles.labelSmall.copyWith(
-                    color: _progressColor,
+                    color: statusColor,
                     fontWeight: FontWeight.w500,
                   ),
                 ),

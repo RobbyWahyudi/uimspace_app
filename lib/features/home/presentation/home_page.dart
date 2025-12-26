@@ -4,8 +4,8 @@ import 'package:uimspace_app/core/widgets/space_components.dart';
 import 'widgets/home_widgets.dart';
 import 'package:uimspace_app/features/notifications/presentation/notification_page.dart';
 import 'package:uimspace_app/features/profile/presentation/profile_page.dart';
-import 'package:uimspace_app/features/course/data/models/course_models.dart';
-import 'package:uimspace_app/features/course/presentation/course_detail_page.dart';
+import 'package:uimspace_app/features/courses/models/course_model.dart';
+import 'package:uimspace_app/features/courses/presentation/course_detail_page.dart';
 
 /// Halaman Beranda (Home)
 /// Menampilkan dashboard utama dengan:
