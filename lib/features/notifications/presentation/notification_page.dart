@@ -3,6 +3,8 @@ import '../../../core/theme/space_theme.dart';
 import '../../../core/widgets/space_card.dart' hide NotificationType;
 import '../models/notification_model.dart';
 import 'notification_controller.dart';
+import '../../home/presentation/announcements_list_page.dart';
+import '../../home/presentation/widgets/announcements_section.dart';
 
 class NotificationsPage extends StatefulWidget {
   const NotificationsPage({super.key});
@@ -26,9 +28,10 @@ class _NotificationsPageState extends State<NotificationsPage> {
             listenable: _controller,
             builder: (context, _) {
               if (_controller.unreadCount > 0) {
-                return TextButton(
+                return IconButton(
                   onPressed: () => _controller.markAllAsRead(),
-                  child: const Text('Tandai Semua Dibaca'),
+                  icon: const Icon(Icons.done_all_rounded),
+                  tooltip: 'Tandai Semua Dibaca',
                 );
               }
               return const SizedBox.shrink();
@@ -41,29 +44,116 @@ class _NotificationsPageState extends State<NotificationsPage> {
           ),
         ],
       ),
-      body: ListenableBuilder(
-        listenable: _controller,
-        builder: (context, _) {
-          final notifications = _controller.notifications;
+      body: SafeArea(
+        child: ListenableBuilder(
+          listenable: _controller,
+          builder: (context, _) {
+            final notifications = _controller.notifications;
 
-          if (notifications.isEmpty) {
-            return _buildEmptyState();
-          }
+            if (notifications.isEmpty) {
+              return _buildEmptyState();
+            }
 
-          return ListView.separated(
-            padding: const EdgeInsets.all(SpaceDimensions.spacing16),
-            itemCount: notifications.length,
-            separatorBuilder: (context, index) =>
+            return ListView(
+              padding: const EdgeInsets.all(SpaceDimensions.spacing16),
+              children: [
+                // Announcement Navigation Card
+                _buildAnnouncementsNavCard(),
+
+                const SizedBox(height: SpaceDimensions.spacing24),
+
+                // Notifications Label
+                Text(
+                  'Riwayat Notifikasi',
+                  style: SpaceTextStyles.titleSmall.copyWith(
+                    color: SpaceColors.textSecondary,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
                 const SizedBox(height: SpaceDimensions.spacing12),
-            itemBuilder: (context, index) {
-              final item = notifications[index];
-              return _NotificationItem(
-                notification: item,
-                onTap: () => _controller.markAsRead(item.id),
-              );
-            },
-          );
-        },
+
+                // Notifications List
+                ...List.generate(notifications.length, (index) {
+                  final item = notifications[index];
+                  return Padding(
+                    padding: const EdgeInsets.only(
+                      bottom: SpaceDimensions.spacing12,
+                    ),
+                    child: _NotificationItem(
+                      notification: item,
+                      onTap: () => _controller.markAsRead(item.id),
+                    ),
+                  );
+                }),
+              ],
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAnnouncementsNavCard() {
+    return SpaceCard(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => AnnouncementsListPage(
+              announcements: [
+                Announcement(
+                  id: '1',
+                  title: 'Jadwal UAS Semester Ganjil 2024/2025',
+                  content:
+                      'Ujian Akhir Semester akan dilaksanakan pada tanggal 15-25 Januari 2025. Pastikan semua mahasiswa sudah menyelesaikan administrasi perkuliahan.',
+                  date: DateTime.now().subtract(const Duration(hours: 2)),
+                  type: AnnouncementType.important,
+                  isRead: false,
+                  author: 'Bagian Akademik',
+                ),
+                Announcement(
+                  id: '2',
+                  title: 'Seminar Nasional Teknologi Informasi',
+                  content:
+                      'Fakultas Teknik mengadakan Seminar Nasional dengan tema "Artificial Intelligence & Future of Education". Pendaftaran dibuka hingga 10 Januari 2025.',
+                  date: DateTime.now().subtract(const Duration(days: 1)),
+                  type: AnnouncementType.event,
+                  isRead: true,
+                  author: 'Fakultas Teknik',
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+      backgroundColor: SpaceColors.primary.withValues(alpha: 0.1),
+      borderColor: SpaceColors.primary.withValues(alpha: 0.3),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Pengumuman Kampus',
+                  style: SpaceTextStyles.titleMedium.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  'Lihat semua informasi dan pengumuman terbaru',
+                  style: SpaceTextStyles.bodySmall.copyWith(
+                    color: SpaceColors.textSecondary,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const Icon(
+            Icons.chevron_right_rounded,
+            color: SpaceColors.textSecondary,
+          ),
+        ],
       ),
     );
   }
@@ -132,20 +222,6 @@ class _NotificationItem extends StatelessWidget {
 
   const _NotificationItem({required this.notification, required this.onTap});
 
-  IconData get _icon => switch (notification.type) {
-    NotificationType.assignmentSubmitted => Icons.check_circle_outline_rounded,
-    NotificationType.deadlineApproaching => Icons.timer_outlined,
-    NotificationType.announcement => Icons.campaign_outlined,
-    NotificationType.gradeUpdate => Icons.grading_rounded,
-  };
-
-  Color get _color => switch (notification.type) {
-    NotificationType.assignmentSubmitted => SpaceColors.success,
-    NotificationType.deadlineApproaching => SpaceColors.warning,
-    NotificationType.announcement => SpaceColors.info,
-    NotificationType.gradeUpdate => SpaceColors.secondary,
-  };
-
   @override
   Widget build(BuildContext context) {
     return SpaceCard(
@@ -159,16 +235,6 @@ class _NotificationItem extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Icon with color circle
-          Container(
-            padding: const EdgeInsets.all(SpaceDimensions.spacing10),
-            decoration: BoxDecoration(
-              color: _color.withValues(alpha: 0.1),
-              shape: BoxShape.circle,
-            ),
-            child: Icon(_icon, color: _color, size: SpaceDimensions.iconMd),
-          ),
-          const SizedBox(width: SpaceDimensions.spacing16),
           // Content
           Expanded(
             child: Column(

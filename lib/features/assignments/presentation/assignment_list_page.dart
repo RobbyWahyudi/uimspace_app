@@ -221,15 +221,6 @@ class _AssignmentCard extends StatelessWidget {
 
   const _AssignmentCard({required this.task});
 
-  Color get _priorityColor {
-    return switch (task.priority) {
-      TaskPriority.urgent => SpaceColors.error,
-      TaskPriority.high => SpaceColors.warning,
-      TaskPriority.normal => SpaceColors.primary,
-      TaskPriority.low => SpaceColors.success,
-    };
-  }
-
   String get _typeLabel {
     return switch (task.type) {
       TaskType.assignment => 'Tugas',
@@ -261,13 +252,13 @@ class _AssignmentCard extends StatelessWidget {
                     vertical: 4,
                   ),
                   decoration: BoxDecoration(
-                    color: _priorityColor.withValues(alpha: 0.1),
+                    color: Colors.white.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: Text(
                     _typeLabel.toUpperCase(),
                     style: SpaceTextStyles.labelSmall.copyWith(
-                      color: _priorityColor,
+                      color: Colors.white,
                       fontWeight: FontWeight.bold,
                       fontSize: 10,
                     ),
