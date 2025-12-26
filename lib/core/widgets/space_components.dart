@@ -201,6 +201,7 @@ class SpaceProgressBar extends StatelessWidget {
   final Color? backgroundColor;
   final double height;
   final String? label;
+  final Color? labelColor;
 
   const SpaceProgressBar({
     super.key,
@@ -209,6 +210,7 @@ class SpaceProgressBar extends StatelessWidget {
     this.backgroundColor,
     this.height = 8,
     this.label,
+    this.labelColor,
   });
 
   @override
@@ -221,11 +223,14 @@ class SpaceProgressBar extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(label!, style: SpaceTextStyles.labelSmall),
+              Text(
+                label!,
+                style: SpaceTextStyles.labelSmall.copyWith(color: labelColor),
+              ),
               Text(
                 '${(value * 100).toInt()}%',
                 style: SpaceTextStyles.labelSmall.copyWith(
-                  color: color ?? SpaceColors.primary,
+                  color: labelColor ?? color ?? SpaceColors.primary,
                 ),
               ),
             ],

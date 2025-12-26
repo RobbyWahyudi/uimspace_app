@@ -135,8 +135,6 @@ class _CourseDetailPageState extends State<CourseDetailPage>
 
   @override
   Widget build(BuildContext context) {
-    final themeColor = widget.course.accentColor ?? SpaceColors.primary;
-
     return Scaffold(
       backgroundColor: SpaceColors.background,
       body: NestedScrollView(
@@ -146,7 +144,8 @@ class _CourseDetailPageState extends State<CourseDetailPage>
               expandedHeight: 220.0,
               floating: false,
               pinned: true,
-              backgroundColor: themeColor,
+              backgroundColor: SpaceColors.primary,
+              surfaceTintColor: Colors.transparent,
               leading: Container(
                 margin: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
@@ -183,9 +182,9 @@ class _CourseDetailPageState extends State<CourseDetailPage>
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                       colors: [
-                        themeColor,
-                        themeColor.withValues(alpha: 0.6),
-                        themeColor.withValues(alpha: 0.4),
+                        SpaceColors.primary,
+                        SpaceColors.primary.withValues(alpha: 0.8),
+                        SpaceColors.primary.withValues(alpha: 0.6),
                       ],
                     ),
                   ),
@@ -244,6 +243,7 @@ class _CourseDetailPageState extends State<CourseDetailPage>
                                 ),
                                 height: 6,
                                 label: 'Progres Belajar',
+                                labelColor: Colors.white,
                               ),
                             ],
                           ),
@@ -591,7 +591,7 @@ class _CourseDetailPageState extends State<CourseDetailPage>
                       if (assessment.isGraded) ...[
                         const SizedBox(height: 6),
                         Text(
-                          'Dinilai: ${assessment.grade}',
+                          'Nilai: ${assessment.grade}',
                           style: SpaceTextStyles.labelSmall.copyWith(
                             color: SpaceColors.success,
                             fontWeight: FontWeight.bold,
