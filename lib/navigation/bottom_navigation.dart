@@ -95,7 +95,7 @@ class _MainNavigationShellState extends State<MainNavigationShell> {
         child: Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: SpaceDimensions.spacing8,
-            vertical: SpaceDimensions.spacing8,
+            vertical: SpaceDimensions.spacing4,
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -125,9 +125,7 @@ class _MainNavigationShellState extends State<MainNavigationShell> {
             vertical: SpaceDimensions.spacing8,
           ),
           decoration: BoxDecoration(
-            color: isSelected
-                ? SpaceColors.primary.withValues(alpha: 0.1)
-                : Colors.transparent,
+            color: Colors.transparent,
             borderRadius: BorderRadius.circular(SpaceDimensions.radiusMd),
           ),
           child: Column(
@@ -145,7 +143,7 @@ class _MainNavigationShellState extends State<MainNavigationShell> {
                       : SpaceColors.textSecondary,
                 ),
               ),
-              const SizedBox(height: SpaceDimensions.spacing4),
+              const SizedBox(height: SpaceDimensions.spacing2),
               // Label
               Text(
                 item.label,
