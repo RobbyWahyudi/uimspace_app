@@ -14,43 +14,19 @@ class AnnouncementsListPage extends StatefulWidget {
   State<AnnouncementsListPage> createState() => _AnnouncementsListPageState();
 }
 
-class _AnnouncementsListPageState extends State<AnnouncementsListPage>
-    with SingleTickerProviderStateMixin {
-  late TabController _tabController;
-  final TextEditingController _searchController = TextEditingController();
-  String _searchQuery = '';
-
+class _AnnouncementsListPageState extends State<AnnouncementsListPage> {
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
   }
 
   @override
   void dispose() {
-    _tabController.dispose();
-    _searchController.dispose();
     super.dispose();
   }
 
-  List<Announcement> get _filteredAnnouncements {
+  List<Announcement> get _sortedAnnouncements {
     List<Announcement> list = widget.announcements;
-
-    // Tab Filter
-    if (_tabController.index == 1) {
-      list = list.where((a) => !a.isRead).toList();
-    }
-
-    // Search Filter
-    if (_searchQuery.isNotEmpty) {
-      list = list
-          .where(
-            (a) =>
-                a.title.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-                a.content.toLowerCase().contains(_searchQuery.toLowerCase()),
-          )
-          .toList();
-    }
 
     // Sort by date (Newest first)
     list.sort((a, b) => b.date.compareTo(a.date));
@@ -63,76 +39,33 @@ class _AnnouncementsListPageState extends State<AnnouncementsListPage>
     return Scaffold(
       backgroundColor: SpaceColors.background,
       appBar: AppBar(
-        title: const Text('Pengumuman'),
-        backgroundColor: SpaceColors.primary,
-        foregroundColor: Colors.white,
+        title: Text(
+          'Pengumuman',
+          style: SpaceTextStyles.titleMedium.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        centerTitle: true,
+        backgroundColor: SpaceColors.background,
+        foregroundColor: SpaceColors.textPrimary,
         surfaceTintColor: Colors.transparent,
-        bottom: TabBar(
-          controller: _tabController,
-          indicatorColor: Colors.white,
-          labelColor: Colors.white,
-          unselectedLabelColor: Colors.white.withValues(alpha: 0.7),
-          onTap: (index) => setState(() {}),
-          tabs: const [
-            Tab(text: 'Semua'),
-            Tab(text: 'Belum Dibaca'),
-          ],
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new_rounded),
+          onPressed: () => Navigator.pop(context),
         ),
       ),
       body: SafeArea(
-        child: Column(
-          children: [
-            _buildSearchField(),
-            Expanded(
-              child: _filteredAnnouncements.isEmpty
-                  ? _buildEmptyState()
-                  : ListView.builder(
-                      padding: const EdgeInsets.all(16),
-                      itemCount: _filteredAnnouncements.length,
-                      itemBuilder: (context, index) {
-                        return _AnnouncementListCard(
-                          announcement: _filteredAnnouncements[index],
-                        );
-                      },
-                    ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSearchField() {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: TextField(
-        controller: _searchController,
-        onChanged: (value) => setState(() => _searchQuery = value),
-        decoration: InputDecoration(
-          hintText: 'Cari pengumuman...',
-          prefixIcon: const Icon(
-            Icons.search,
-            color: SpaceColors.textSecondary,
-          ),
-          suffixIcon: _searchQuery.isNotEmpty
-              ? IconButton(
-                  icon: const Icon(
-                    Icons.clear,
-                    color: SpaceColors.textSecondary,
-                  ),
-                  onPressed: () {
-                    _searchController.clear();
-                    setState(() => _searchQuery = '');
-                  },
-                )
-              : null,
-          filled: true,
-          fillColor: SpaceColors.surfaceVariant,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide.none,
-          ),
-        ),
+        child: _sortedAnnouncements.isEmpty
+            ? _buildEmptyState()
+            : ListView.builder(
+                padding: const EdgeInsets.all(16),
+                itemCount: _sortedAnnouncements.length,
+                itemBuilder: (context, index) {
+                  return _AnnouncementListCard(
+                    announcement: _sortedAnnouncements[index],
+                  );
+                },
+              ),
       ),
     );
   }

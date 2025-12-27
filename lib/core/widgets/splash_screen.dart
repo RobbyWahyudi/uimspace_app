@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../core/theme/space_theme.dart';
-import '../../features/auth/presentation/login_page.dart';
+import '../../features/auth/presentation/welcome_page.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -39,7 +39,7 @@ class _SplashScreenState extends State<SplashScreen>
     Future.delayed(const Duration(seconds: 3), () {
       if (mounted) {
         Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const LoginPage()),
+          MaterialPageRoute(builder: (context) => const WelcomePage()),
         );
       }
     });

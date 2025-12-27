@@ -156,17 +156,20 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
       ),
       actions: [
-        IconButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) =>
-                    EditProfilePage(user: user, controller: _controller),
-              ),
-            );
-          },
-          icon: const Icon(Icons.edit_outlined, color: Colors.white),
+        Padding(
+          padding: const EdgeInsets.only(right: 16),
+          child: IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      EditProfilePage(user: user, controller: _controller),
+                ),
+              );
+            },
+            icon: const Icon(Icons.edit_outlined, color: Colors.white),
+          ),
         ),
       ],
     );

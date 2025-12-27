@@ -73,7 +73,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
     return Scaffold(
       backgroundColor: SpaceColors.background,
       appBar: AppBar(
-        title: const Text('Edit Profil'),
+        title: Text(
+          'Edit Profil',
+          style: SpaceTextStyles.titleMedium.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(

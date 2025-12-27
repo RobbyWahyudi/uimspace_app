@@ -14,8 +14,6 @@ class AssignmentListPage extends StatefulWidget {
 class _AssignmentListPageState extends State<AssignmentListPage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  final TextEditingController _searchController = TextEditingController();
-  String _searchQuery = '';
 
   // Dummy data
   final List<UpcomingTask> _allTasks = [
@@ -78,7 +76,6 @@ class _AssignmentListPageState extends State<AssignmentListPage>
   @override
   void dispose() {
     _tabController.dispose();
-    _searchController.dispose();
     super.dispose();
   }
 
@@ -98,17 +95,6 @@ class _AssignmentListPageState extends State<AssignmentListPage>
           .toList();
     }
 
-    // Filter by Search
-    if (_searchQuery.isNotEmpty) {
-      tasks = tasks
-          .where(
-            (t) =>
-                t.title.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-                t.courseName.toLowerCase().contains(_searchQuery.toLowerCase()),
-          )
-          .toList();
-    }
-
     // Sort by Due Date (Closest first)
     tasks.sort((a, b) => a.dueDate.compareTo(b.dueDate));
 
@@ -120,27 +106,44 @@ class _AssignmentListPageState extends State<AssignmentListPage>
     return Scaffold(
       backgroundColor: SpaceColors.background,
       appBar: AppBar(
-        title: const Text('Tugas & Kuis'),
-        backgroundColor: SpaceColors.primary,
-        foregroundColor: Colors.white,
+        title: Text(
+          'Tugas & Kuis',
+          style: SpaceTextStyles.titleMedium.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        centerTitle: true,
+        backgroundColor: SpaceColors.background,
+        foregroundColor: SpaceColors.textPrimary,
         surfaceTintColor: Colors.transparent,
-        bottom: TabBar(
-          controller: _tabController,
-          indicatorColor: Colors.white,
-          labelColor: Colors.white,
-          unselectedLabelColor: Colors.white.withValues(alpha: 0.7),
-          onTap: (index) => setState(() {}),
-          tabs: const [
-            Tab(text: 'Semua'),
-            Tab(text: 'Tugas'),
-            Tab(text: 'Kuis'),
-          ],
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new_rounded),
+          onPressed: () => Navigator.pop(context),
         ),
       ),
       body: SafeArea(
         child: Column(
           children: [
-            _buildSearchField(),
+            Container(
+              color: SpaceColors.background,
+              child: TabBar(
+                controller: _tabController,
+                labelColor: SpaceColors.primary,
+                unselectedLabelColor: SpaceColors.textSecondary,
+                indicatorColor: SpaceColors.primary,
+                indicatorWeight: 3,
+                indicatorSize: TabBarIndicatorSize.tab,
+                labelStyle: SpaceTextStyles.titleSmall.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+                onTap: (index) => setState(() {}),
+                tabs: const [
+                  Tab(text: 'Semua'),
+                  Tab(text: 'Tugas'),
+                  Tab(text: 'Kuis'),
+                ],
+              ),
+            ),
             Expanded(
               child: _filteredTasks.isEmpty
                   ? _buildEmptyState()
@@ -153,41 +156,6 @@ class _AssignmentListPageState extends State<AssignmentListPage>
                     ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSearchField() {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: TextField(
-        controller: _searchController,
-        onChanged: (value) => setState(() => _searchQuery = value),
-        decoration: InputDecoration(
-          hintText: 'Cari tugas atau mata kuliah...',
-          prefixIcon: const Icon(
-            Icons.search,
-            color: SpaceColors.textSecondary,
-          ),
-          suffixIcon: _searchQuery.isNotEmpty
-              ? IconButton(
-                  icon: const Icon(
-                    Icons.clear,
-                    color: SpaceColors.textSecondary,
-                  ),
-                  onPressed: () {
-                    _searchController.clear();
-                    setState(() => _searchQuery = '');
-                  },
-                )
-              : null,
-          filled: true,
-          fillColor: SpaceColors.surfaceVariant,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide.none,
-          ),
         ),
       ),
     );

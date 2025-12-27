@@ -21,8 +21,17 @@ class _NotificationsPageState extends State<NotificationsPage> {
     return Scaffold(
       backgroundColor: SpaceColors.background,
       appBar: AppBar(
-        title: const Text('Notifikasi'),
+        title: Text(
+          'Notifikasi',
+          style: SpaceTextStyles.titleMedium.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         centerTitle: false,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new_rounded),
+          onPressed: () => Navigator.pop(context),
+        ),
         actions: [
           ListenableBuilder(
             listenable: _controller,
@@ -37,10 +46,13 @@ class _NotificationsPageState extends State<NotificationsPage> {
               return const SizedBox.shrink();
             },
           ),
-          IconButton(
-            onPressed: () => _showClearDialog(),
-            icon: const Icon(Icons.delete_sweep_outlined),
-            tooltip: 'Hapus Semua',
+          Padding(
+            padding: const EdgeInsets.only(right: 8),
+            child: IconButton(
+              onPressed: () => _showClearDialog(),
+              icon: const Icon(Icons.delete_sweep_outlined),
+              tooltip: 'Hapus Semua',
+            ),
           ),
         ],
       ),

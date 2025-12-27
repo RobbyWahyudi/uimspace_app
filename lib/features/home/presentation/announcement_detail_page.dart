@@ -13,10 +13,20 @@ class AnnouncementDetailPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: SpaceColors.background,
       appBar: AppBar(
-        title: const Text('Detail Pengumuman'),
-        backgroundColor: SpaceColors.primary,
-        foregroundColor: Colors.white,
+        title: Text(
+          'Detail Pengumuman',
+          style: SpaceTextStyles.titleMedium.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        centerTitle: true,
+        backgroundColor: SpaceColors.background,
+        foregroundColor: SpaceColors.textPrimary,
         surfaceTintColor: Colors.transparent,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new_rounded),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
