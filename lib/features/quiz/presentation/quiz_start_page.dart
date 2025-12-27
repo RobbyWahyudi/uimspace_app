@@ -31,139 +31,139 @@ class QuizStartPage extends StatelessWidget {
         ),
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Header Image/Icon
-            Center(
-              child: Container(
-                padding: const EdgeInsets.all(32),
-                decoration: BoxDecoration(
-                  color: SpaceColors.primary.withValues(alpha: 0.1),
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(
-                  Icons.quiz_rounded,
-                  size: 64,
-                  color: SpaceColors.primary,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Header Image/Icon
+              Center(
+                child: Container(
+                  padding: const EdgeInsets.all(32),
+                  decoration: BoxDecoration(
+                    color: SpaceColors.primary.withValues(alpha: 0.1),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.quiz_rounded,
+                    size: 64,
+                    color: SpaceColors.primary,
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(height: 32),
+              const SizedBox(height: 32),
 
-            // Quiz Title
-            Center(
-              child: Text(
-                quiz.title,
+              // Quiz Title
+              Center(
+                child: Text(
+                  quiz.title,
+                  textAlign: TextAlign.center,
+                  style: SpaceTextStyles.headlineSmall.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+
+              // Description
+              Text(
+                quiz.description,
                 textAlign: TextAlign.center,
-                style: SpaceTextStyles.headlineSmall.copyWith(
+                style: SpaceTextStyles.bodyMedium.copyWith(
+                  color: SpaceColors.textSecondary,
+                ),
+              ),
+
+              const SizedBox(height: 40),
+
+              // Rules/Stats Card
+              Text(
+                'Detail Kuis',
+                style: SpaceTextStyles.titleSmall.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
               ),
-            ),
-            const SizedBox(height: 16),
-
-            // Description
-            Text(
-              quiz.description,
-              textAlign: TextAlign.center,
-              style: SpaceTextStyles.bodyMedium.copyWith(
-                color: SpaceColors.textSecondary,
+              const SizedBox(height: 16),
+              Row(
+                children: [
+                  Expanded(
+                    child: _buildInfoCard(
+                      Icons.timer_outlined,
+                      'Waktu',
+                      '${quiz.durationMinutes} Menit',
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: _buildInfoCard(
+                      Icons.help_outline_rounded,
+                      'Soal',
+                      '${quiz.totalQuestions} Pertanyaan',
+                    ),
+                  ),
+                ],
               ),
-            ),
-
-            const SizedBox(height: 40),
-
-            // Rules/Stats Card
-            Text(
-              'Detail Kuis',
-              style: SpaceTextStyles.titleSmall.copyWith(
-                fontWeight: FontWeight.bold,
+              const SizedBox(height: 12),
+              _buildInfoCard(
+                Icons.stars_rounded,
+                'Kriteria Lulus',
+                'Minimal 70% Jawaban Benar',
               ),
-            ),
-            const SizedBox(height: 16),
-            Row(
-              children: [
-                Expanded(
-                  child: _buildInfoCard(
-                    Icons.timer_outlined,
-                    'Waktu',
-                    '${quiz.durationMinutes} Menit',
+
+              const SizedBox(height: 32),
+
+              // Instruction list
+              Text(
+                'Instruksi',
+                style: SpaceTextStyles.titleSmall.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 12),
+              _buildInstructionItem(
+                'Selesaikan kuis dalam batas waktu yang ditentukan.',
+              ),
+              _buildInstructionItem(
+                'Jawaban akan tersimpan otomatis setiap soal.',
+              ),
+              _buildInstructionItem('Pastikan koneksi internet stabil.'),
+              _buildInstructionItem(
+                'Hasil akan langsung ditampilkan setelah submit.',
+              ),
+
+              const SizedBox(height: 32),
+
+              // Start Button (Moved here)
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => QuizQuestionPage(quiz: quiz),
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: SpaceColors.primary,
+                  foregroundColor: Colors.white,
+                  minimumSize: const Size(double.infinity, 56),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(
+                      SpaceDimensions.radiusMd,
+                    ),
+                  ),
+                  elevation: 0,
+                ),
+                child: Text(
+                  'Mulai Kuis Sekarang',
+                  style: SpaceTextStyles.titleSmall.copyWith(
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: _buildInfoCard(
-                    Icons.help_outline_rounded,
-                    'Soal',
-                    '${quiz.totalQuestions} Pertanyaan',
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 12),
-            _buildInfoCard(
-              Icons.stars_rounded,
-              'Kriteria Lulus',
-              'Minimal 70% Jawaban Benar',
-            ),
-
-            const SizedBox(height: 32),
-
-            // Instruction list
-            Text(
-              'Instruksi',
-              style: SpaceTextStyles.titleSmall.copyWith(
-                fontWeight: FontWeight.bold,
               ),
-            ),
-            const SizedBox(height: 12),
-            _buildInstructionItem(
-              'Selesaikan kuis dalam batas waktu yang ditentukan.',
-            ),
-            _buildInstructionItem(
-              'Jawaban akan tersimpan otomatis setiap soal.',
-            ),
-            _buildInstructionItem('Pastikan koneksi internet stabil.'),
-            _buildInstructionItem(
-              'Hasil akan langsung ditampilkan setelah submit.',
-            ),
-
-            const SizedBox(height: 50),
-          ],
-        ),
-      ),
-      bottomNavigationBar: Container(
-        padding: const EdgeInsets.all(24),
-        decoration: BoxDecoration(
-          color: SpaceColors.surface,
-          border: const Border(top: BorderSide(color: SpaceColors.border)),
-        ),
-        child: ElevatedButton(
-          onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => QuizQuestionPage(quiz: quiz),
-              ),
-            );
-          },
-          style: ElevatedButton.styleFrom(
-            backgroundColor: SpaceColors.primary,
-            foregroundColor: Colors.white,
-            minimumSize: const Size(double.infinity, 56),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(SpaceDimensions.radiusMd),
-            ),
-            elevation: 0,
-          ),
-          child: Text(
-            'Mulai Kuis Sekarang',
-            style: SpaceTextStyles.titleSmall.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
+              const SizedBox(height: 24),
+            ],
           ),
         ),
       ),

@@ -136,37 +136,39 @@ class _QuizQuestionPageState extends State<QuizQuestionPage> {
           ],
         ),
       ),
-      body: Column(
-        children: [
-          SpaceProgressBar(
-            value: progress,
-            height: 4,
-            backgroundColor: SpaceColors.border,
-          ),
-          Expanded(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    question?.text ?? 'Apa kepanjangan dari UIM?',
-                    style: SpaceTextStyles.titleLarge.copyWith(height: 1.4),
-                  ),
-                  const SizedBox(height: 32),
-                  ...List.generate(
-                    question?.options.length ?? 4,
-                    (index) => _buildOption(
-                      index,
-                      question?.options[index] ?? 'Opsi ${index + 1}',
+      body: SafeArea(
+        child: Column(
+          children: [
+            SpaceProgressBar(
+              value: progress,
+              height: 4,
+              backgroundColor: SpaceColors.border,
+            ),
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      question?.text ?? 'Apa kepanjangan dari UIM?',
+                      style: SpaceTextStyles.titleLarge.copyWith(height: 1.4),
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 32),
+                    ...List.generate(
+                      question?.options.length ?? 4,
+                      (index) => _buildOption(
+                        index,
+                        question?.options[index] ?? 'Opsi ${index + 1}',
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-          _buildNavigation(),
-        ],
+            _buildNavigation(),
+          ],
+        ),
       ),
     );
   }

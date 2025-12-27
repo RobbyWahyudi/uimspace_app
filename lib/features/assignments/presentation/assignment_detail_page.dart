@@ -95,78 +95,101 @@ class _AssignmentDetailPageState extends State<AssignmentDetailPage> {
         ),
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildStatusBadge(isGraded, isOverdue),
-            const SizedBox(height: 16),
-            Text(
-              widget.assignment.title,
-              style: SpaceTextStyles.headlineSmall.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 24),
-            Row(
-              children: [
-                Expanded(
-                  child: _buildInfoItem(
-                    Icons.calendar_month_rounded,
-                    'Deadline',
-                    deadlineStr,
-                    isOverdue ? SpaceColors.error : SpaceColors.textSecondary,
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: _buildInfoItem(
-                    Icons.assignment_ind_rounded,
-                    'Tipe',
-                    isQuiz ? 'Kuis Online' : 'Upload File',
-                    SpaceColors.primary,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 32),
-            Text(
-              'Deskripsi',
-              style: SpaceTextStyles.titleSmall.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              widget.assignment.description ??
-                  'Tidak ada deskripsi untuk tugas ini.',
-              style: SpaceTextStyles.bodyMedium.copyWith(
-                color: SpaceColors.textSecondary,
-                height: 1.5,
-              ),
-            ),
-            const SizedBox(height: 32),
-            if (!isQuiz) ...[
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildStatusBadge(isGraded, isOverdue),
+              const SizedBox(height: 16),
               Text(
-                'Pengumpulan',
+                widget.assignment.title,
+                style: SpaceTextStyles.headlineSmall.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 24),
+              Row(
+                children: [
+                  Expanded(
+                    child: _buildInfoItem(
+                      Icons.calendar_month_rounded,
+                      'Deadline',
+                      deadlineStr,
+                      isOverdue ? SpaceColors.error : SpaceColors.textSecondary,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: _buildInfoItem(
+                      Icons.assignment_ind_rounded,
+                      'Tipe',
+                      isQuiz ? 'Kuis Online' : 'Upload File',
+                      SpaceColors.primary,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 32),
+              Text(
+                'Deskripsi',
                 style: SpaceTextStyles.titleSmall.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(height: 16),
-              if (_isSubmitted)
-                _buildSubmittedView(isGraded)
-              else
-                _buildUploadForm(),
+              const SizedBox(height: 8),
+              Text(
+                widget.assignment.description ??
+                    'Tidak ada deskripsi untuk tugas ini.',
+                style: SpaceTextStyles.bodyMedium.copyWith(
+                  color: SpaceColors.textSecondary,
+                  height: 1.5,
+                ),
+              ),
+              const SizedBox(height: 32),
+              if (!isQuiz) ...[
+                Text(
+                  'Pengumpulan',
+                  style: SpaceTextStyles.titleSmall.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                if (_isSubmitted)
+                  _buildSubmittedView(isGraded)
+                else
+                  _buildUploadForm(),
+              ],
+
+              if (!_isSubmitted && !isQuiz) ...[
+                const SizedBox(height: 32),
+                ElevatedButton(
+                  onPressed: _handleSubmit,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: SpaceColors.primary,
+                    foregroundColor: Colors.white,
+                    minimumSize: const Size(double.infinity, 54),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(
+                        SpaceDimensions.radiusMd,
+                      ),
+                    ),
+                    elevation: 0,
+                  ),
+                  child: Text(
+                    'Kumpulkan Tugas',
+                    style: SpaceTextStyles.titleSmall.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+              const SizedBox(height: 40),
             ],
-            const SizedBox(height: 40),
-          ],
+          ),
         ),
       ),
-      bottomNavigationBar: !_isSubmitted && !isQuiz
-          ? _buildBottomAction()
-          : null,
     );
   }
 
@@ -389,34 +412,6 @@ class _AssignmentDetailPageState extends State<AssignmentDetailPage> {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildBottomAction() {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: SpaceColors.surface,
-        border: const Border(top: BorderSide(color: SpaceColors.border)),
-      ),
-      child: ElevatedButton(
-        onPressed: _handleSubmit,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: SpaceColors.primary,
-          foregroundColor: Colors.white,
-          minimumSize: const Size(double.infinity, 54),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(SpaceDimensions.radiusMd),
-          ),
-          elevation: 0,
-        ),
-        child: Text(
-          'Kumpulkan Tugas',
-          style: SpaceTextStyles.titleSmall.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
       ),
     );
   }
